@@ -9,7 +9,9 @@ import { IProduct } from 'src/app/entities/product/product.model';
 })
 export class ProductListComponent implements OnInit, OnChanges {
 
-  products: Array<IProduct> = [];
+  products= {
+    "image":""
+  };
   @Input() productToDisplay: IProduct = null;
 
   constructor(protected productService: ProductService) { }
@@ -21,22 +23,18 @@ export class ProductListComponent implements OnInit, OnChanges {
 
   // If new product created, we add it to the list.
   ngOnChanges(): void {
-    if (this.productToDisplay !== null) {
-      this.products.push(this.productToDisplay);
-    }
+  
   }
 
-  // Delete a product. 
-  delete(id: string) {
-    this.productService.delete(id).then((result: any) => this.loadAll());
-  }
 
   // Load all products.
   private loadAll() {
     this.productService
       .get()
-      .then((result: Array<IProduct>) => {
-        this.products = result;
+      .then((result) => {
+        this.products = result ? JSON.parse(result) : '';
+        console.log(this.products)
+        console.log("this.products")
       });
   }
 
